@@ -1,103 +1,128 @@
-import Image from "next/image";
+"use client";
+import { useState } from 'react';
+import quotes from '../constants/quotes'
+import FormComponent from '@/components/forms/FormComponent';
+import Headers from '@/components/headers/Headers';
+import SlideInCard  from '@/components/SlideInCard/SlideInCard';
 
 export default function Home() {
-  return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm/6 text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-[family-name:var(--font-geist-mono)] font-semibold">
-              app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+  const [currentQuote, setCurrentQuote] = useState(''); // State for the displayed quote
+  const [isLoadingQuote, setIsLoadingQuote] = useState(false); // State for loading indicator
+  const [quoteError, setQuoteError] = useState(''); // State for quote fetching errors
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+  const handleGetQuoteClick = async () => {
+    setIsLoadingQuote(true);
+    setCurrentQuote('');
+    setQuoteError('');
+
+    try {
+      if (quotes && quotes.length > 0) {
+        const randomIndex = Math.floor(Math.random() * quotes.length);
+        const selectedQuote = quotes[randomIndex].text;
+        setCurrentQuote(selectedQuote);
+      } else {
+        setQuoteError('No quotes available.');
+      }
+    } catch (error) {
+      setQuoteError('Failed to select a quote.');
+    } finally {
+      setIsLoadingQuote(false);
+    }
+  };
+
+
+  return (
+    <div className="min-h-screen bg-gray-50 font-sans">
+      <section className="bg-blue-600 text-white text-center py-20 px-4">
+        <Headers title='SoftSell - Unlock the Value of Your Software Licenses' delay={0.8} size={'34'} />
+        <Headers title='Sell your unused software licenses quickly and securely.' delay={2} size={'27'} />
+
+
+        <button
+          onClick={handleGetQuoteClick}
+          className="bg-white text-blue-600 font-semibold px-6 py-3 rounded hover:bg-gray-100 transition mb-4"
+          disabled={isLoadingQuote}
+        >
+          {isLoadingQuote ? 'Getting Quote...' : 'Get a Quote'}
+        </button>
+
+        {currentQuote && (
+          <div className="mt-4 p-4 bg-blue-500 rounded-md shadow-lg max-w-md mx-auto">
+            <p className="text-lg font-medium">{currentQuote}</p>
+          </div>
+        )}
+        {quoteError && (
+          <div className="mt-4 p-4 bg-red-400 text-white rounded-md shadow-lg max-w-md mx-auto">
+            <p className="text-lg font-medium">{quoteError}</p>
+          </div>
+        )}
+      </section>
+
+      <section className="py-16 px-4 max-w-4xl mx-auto">
+        <h2 className="text-3xl font-bold text-center mb-12">How It Works</h2>
+        <div className="flex flex-col md:flex-row justify-between gap-8">
+          <div className="flex flex-col md:flex-row justify-between gap-8">
+            <SlideInCard>
+              <div className="flex flex-col items-center text-center">
+                <div className="bg-blue-100 text-blue-600 rounded-full p-6 mb-4">
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-12 w-12" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1M4 12h16M4 8h16M4 4h16" />
+                  </svg>
+                </div>
+                <h3 className="text-xl font-semibold mb-2">Upload License</h3>
+                <p>Submit your unused software license details.</p>
+              </div>
+            </SlideInCard>
+
+            <SlideInCard>
+              <div className="flex flex-col items-center text-center">
+                <div className="bg-blue-100 text-blue-600 rounded-full p-6 mb-4">
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-12 w-12" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 17v-2a4 4 0 014-4h4" />
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h6m-3 0v6m0 0l-3-3m3 3l3-3" />
+                  </svg>
+                </div>
+                <h3 className="text-xl font-semibold mb-2">Get Valuation</h3>
+                <p>Receive a fair market value for your license.</p>
+              </div>
+            </SlideInCard>
+
+            <SlideInCard>
+              <div className="flex flex-col items-center text-center">
+                <div className="bg-blue-100 text-blue-600 rounded-full p-6 mb-4">
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-12 w-12" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3" />
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 12a8 8 0 11-16 0 8 8 0 0116 0z" />
+                  </svg>
+                </div>
+                <h3 className="text-xl font-semibold mb-2">Get Paid</h3>
+                <p>Secure payment directly to your account.</p>
+              </div>
+            </SlideInCard>
+          </div>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+      </section>
+
+      <section className="bg-gray-100 py-16 px-4 max-w-4xl mx-auto">
+        <h2 className="text-3xl font-bold text-center mb-12">Customer Testimonials</h2>
+        <div className="space-y-8 max-w-2xl mx-auto">
+          <div className="bg-white p-6 rounded-lg shadow">
+            <p className="italic mb-4">&quot;SoftSell made selling my unused licenses so easy and profitable! Highly recommend."</p>
+            <p className="font-semibold">- Jane Doe, IT Manager, TechCorp</p>
+          </div>
+          <div className="bg-white p-6 rounded-lg shadow">
+            <p className="italic mb-4">&quot;Excellent service and quick payments. SoftSell is my go-to platform for license selling."</p>
+            <p className="font-semibold">- John Smith, Software Developer, DevSolutions</p>
+          </div>
+        </div>
+      </section>
+
+
+      <section className="bg-white py-16 px-4 max-w-4xl mx-auto">
+        <h2 className="text-3xl font-bold text-center mb-12">Contact Us</h2>
+        <FormComponent />
+      </section>
     </div>
   );
 }
+
