@@ -24,6 +24,7 @@ export default function Home() {
         setQuoteError('No quotes available.');
       }
     } catch (error) {
+      console.log('Error fetching quote:', error);
       setQuoteError('Failed to select a quote.');
     } finally {
       setIsLoadingQuote(false);
@@ -107,11 +108,11 @@ export default function Home() {
         <h2 className="text-3xl font-bold text-center mb-12">Customer Testimonials</h2>
         <div className="space-y-8 max-w-2xl mx-auto">
           <div className="bg-white p-6 rounded-lg shadow">
-            <p className="italic mb-4">&quot;SoftSell made selling my unused licenses so easy and profitable! Highly recommend."</p>
+            <p className="italic mb-4">&quot;SoftSell made selling my unused licenses so easy and profitable! Highly recommend.&quot;</p>
             <p className="font-semibold">- Jane Doe, IT Manager, TechCorp</p>
           </div>
           <div className="bg-white p-6 rounded-lg shadow">
-            <p className="italic mb-4">&quot;Excellent service and quick payments. SoftSell is my go-to platform for license selling."</p>
+            <p className="italic mb-4">&quot;Excellent service and quick payments. SoftSell is my go-to platform for license selling.&quot;</p>
             <p className="font-semibold">- John Smith, Software Developer, DevSolutions</p>
           </div>
         </div>
